@@ -1,0 +1,14 @@
+{
+  "name": "hashigo-camp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "燃やせ！はしごキャンプ — 埼玉のキャンプ場の予約受付状況と、キャンプ＋温泉・エリアめぐりの組み合わせ",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node scripts/test-booking.mjs",
+    "availability": "node scripts/availability/run.mjs",
+    "serve": "npx --yes http-server public -p 8080 -c-1"
+  },
+  "engines": { "node": ">=20" }
+}

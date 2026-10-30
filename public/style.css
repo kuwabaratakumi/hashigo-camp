@@ -1,0 +1,151 @@
+:root {
+  --paper: #fbf8f4;
+  --surface: #ffffff;
+  --ink: #2b2622;
+  --ink-2: #5c534c;
+  --soft-line: #e3dcd4;
+  --head: #2b2622;
+  --ember: #d9480f;        /* 燃やせ！の炎色 */
+  --ember-dark: #b23a0b;
+  --moss: #2f6b4f;
+  --moss-bg: #e3f1e9;
+  --amber-bg: #fff1dc;
+  --amber-ink: #8a4b00;
+  --grey-bg: #efebe7;
+  --sat: #2f62c9;
+  --num: "Barlow Condensed", "Zen Kaku Gothic New", sans-serif;
+  --jp: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--jp); font-size: 15px; line-height: 1.6;
+  font-feature-settings: "palt";
+}
+button, input, select { font: inherit; color: inherit; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--ember); outline-offset: 2px; }
+
+/* ---------- header ---------- */
+.top { position: sticky; top: 0; z-index: 10; background: var(--head); color: #fff; }
+.top__inner, .tools, .days, .main, .foot { max-width: 1080px; margin: 0 auto; padding-inline: 16px; }
+.top__inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 12px; }
+.brand { margin: 0; font-size: 22px; font-weight: 900; letter-spacing: .04em; display: inline-flex; align-items: center; gap: .4em; }
+.brand__icon { width: 1.25em; height: 1.25em; flex: none; color: var(--ember); }
+.date-pick { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; flex: none; }
+.date-pick input { height: 34px; border-radius: 8px; border: 1px solid #fff; background: #fff; color: #222; padding: 0 8px; font-family: var(--num); font-size: 16px; }
+.top :focus-visible { outline-color: #fff; }
+
+.days { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px; padding-top: 6px; padding-bottom: 10px; }
+.day {
+  appearance: none; border: 0; background: transparent; cursor: pointer; padding: 4px 0 6px; color: #fff;
+  display: flex; flex-direction: column; align-items: center; border-radius: 10px;
+}
+.day__d { font-family: var(--num); font-weight: 600; font-size: 34px; line-height: 1; }
+.day__w { font-size: 12px; }
+.day__m { font-family: var(--num); font-size: 13px; line-height: 1; height: 13px; }
+.day[data-dow="6"] .day__d, .day[data-dow="6"] .day__w { color: #8eaaff; }
+.day[aria-current="date"] { background: var(--ember); }
+.day[aria-current="date"] .day__d, .day[aria-current="date"] .day__w { color: #fff; }
+
+.tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding-bottom: 12px; }
+.view { display: inline-flex; border: 1px solid #fff; border-radius: 999px; overflow: hidden; flex: none; }
+.view button { border: 0; background: #fff; color: var(--ink); padding: 6px 14px; cursor: pointer; font-weight: 500; }
+.view button[aria-pressed="true"] { background: var(--ember); color: #fff; }
+.areas { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; flex: 1 1 0; min-width: 0; }
+.chip {
+  flex: none; border: 1px solid #7d726a; background: transparent; color: #fff; border-radius: 999px;
+  padding: 4px 12px; cursor: pointer; font-size: 13px; display: inline-flex; gap: 6px; align-items: center;
+}
+.chip[aria-pressed="true"] { background: #fff; color: var(--ink); border-color: #fff; }
+.chip__n { font-family: var(--num); font-weight: 600; opacity: .75; }
+
+/* ---------- main ---------- */
+.main { padding-top: 18px; padding-bottom: 32px; min-height: 50vh; }
+.summary { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; margin-bottom: 14px; }
+.summary p { margin: 0; }
+.num { font-family: var(--num); font-size: 20px; color: var(--ember); }
+.toggle { display: inline-flex; gap: 6px; align-items: center; font-size: 14px; cursor: pointer; }
+.lead { margin: 0 0 16px; color: var(--ink-2); }
+.empty { color: var(--ink-2); padding: 32px 0; text-align: center; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.card {
+  background: var(--surface); border: 1px solid var(--soft-line); border-radius: 14px; padding: 14px 14px 12px;
+  display: flex; flex-direction: column; gap: 8px; border-left: 6px solid var(--soft-line);
+}
+.card[data-state="open"] { border-left-color: var(--moss); }
+.card[data-state="soon"] { border-left-color: var(--ember); }
+.card--picked { box-shadow: 0 0 0 3px var(--ember); }
+.card__head { display: flex; flex-direction: column; gap: 6px; }
+.card__name { margin: 0; font-size: 17px; font-weight: 700; line-height: 1.35; }
+.card__badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.card__meta { margin: 0; font-size: 13px; color: var(--ink-2); display: grid; gap: 2px; }
+.card__meta div { display: grid; grid-template-columns: 3em 1fr; gap: 6px; }
+.card__meta dt { font-weight: 700; color: var(--ink); }
+.card__meta dd { margin: 0; }
+.card__links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 4px; }
+
+.pill { display: inline-block; font-size: 13px; font-weight: 700; border-radius: 999px; padding: 2px 10px; }
+.pill--open { background: var(--moss-bg); color: var(--moss); }
+.pill--soon { background: var(--amber-bg); color: var(--amber-ink); }
+.pill--season, .pill--unknown, .pill--none, .pill--past { background: var(--grey-bg); color: var(--ink-2); font-weight: 500; }
+.avail { font-size: 13px; border-radius: 999px; padding: 2px 10px; border: 1px solid currentColor; }
+.avail--ok { color: var(--moss); } .avail--few { color: var(--amber-ink); } .avail--full { color: #9b1c1c; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; text-decoration: none; cursor: pointer;
+  background: var(--ember); color: #fff; border: 1px solid var(--ember); border-radius: 999px; padding: 5px 14px; font-size: 13px; font-weight: 500;
+}
+.btn:hover { background: var(--ember-dark); border-color: var(--ember-dark); }
+.btn--ghost { background: transparent; color: var(--ink); border-color: var(--soft-line); }
+.btn--ghost:hover { background: var(--grey-bg); border-color: var(--soft-line); }
+.btn--pick { background: #fff; color: var(--ember); }
+.btn--pick[aria-pressed="true"] { background: var(--ember); color: #fff; }
+
+/* キャンプ＋温泉 */
+.combo { margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px dashed var(--soft-line); }
+.combo__head { margin-bottom: 10px; }
+.combo__name { margin: 0; font-size: 20px; font-weight: 900; display: flex; align-items: center; gap: 8px; }
+.combo__icon { color: var(--ember); }
+.combo__sub { margin: 2px 0 0; color: var(--ink-2); font-size: 13px; }
+.combo__label { font-size: 14px; margin: 10px 0 8px; }
+.combo__note { color: var(--ink-2); font-size: 14px; }
+.combo__more { margin-top: 12px; }
+.combo__more summary { cursor: pointer; font-size: 14px; color: var(--ember-dark); margin-bottom: 8px; }
+
+/* エリアめぐり */
+.route-bar { background: var(--surface); border: 1px solid var(--soft-line); border-radius: 14px; padding: 12px 16px; margin-bottom: 20px; position: sticky; top: 172px; z-index: 5; }
+.route-bar p { margin: 0 0 8px; }
+.route-bar select { border: 1px solid var(--soft-line); border-radius: 6px; padding: 2px 4px; }
+.plan { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.plan li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 14px; }
+.plan__n { font-family: var(--num); font-weight: 700; background: var(--ink); color: #fff; border-radius: 6px; padding: 0 8px; font-size: 14px; }
+.plan__d { font-family: var(--num); font-size: 16px; }
+.plan__c em { color: var(--ink-2); }
+.night { margin-bottom: 24px; }
+.night__title { font-size: 18px; display: flex; align-items: center; gap: 10px; margin: 0 0 10px; }
+
+.foot { padding-top: 16px; padding-bottom: 40px; color: var(--ink-2); font-size: 13px; border-top: 1px solid var(--soft-line); }
+
+/* 文書ページ */
+.doc { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+.doc h1 { font-size: 24px; }
+.doc h2 { font-size: 18px; margin-top: 28px; border-left: 5px solid var(--ember); padding-left: 10px; }
+.doc li { margin-bottom: 4px; }
+.doc-back { color: #fff; font-size: 13px; }
+
+@media (max-width: 640px) {
+  .brand { font-size: 16px; white-space: nowrap; letter-spacing: 0; }
+  .date-pick span { display: none; }
+  .date-pick input { width: 132px; font-size: 15px; }
+  .day__d { font-size: 26px; }
+  .tools { flex-direction: column; align-items: stretch; }
+  .view { align-self: flex-start; }
+  .areas { flex: none; padding-bottom: 2px; }
+  .grid { grid-template-columns: 1fr; }
+  .route-bar { position: static; }
+}
