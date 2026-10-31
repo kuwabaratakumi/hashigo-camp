@@ -51,6 +51,11 @@ jobs:
           TOKEN=$(printf '%s' "$CLOUDFLARE_API_TOKEN" | tr -d '[:space:]')
           echo "::add-mask::$ID"; echo "::add-mask::$TOKEN"
           if [ "$ID" != "$CLOUDFLARE_ACCOUNT_ID" ]; then echo "::warning::CLOUDFLARE_ACCOUNT_ID に空白か改行が入っていたので取り除きました"; fi
+          # ダッシュボードのURL（dash.cloudflare.com/xxxx/...）ごと貼った場合は、32文字のIDだけを取り出す
+          if ! printf '%s' "$ID" | grep -Eq '^[0-9a-f]{32}$'; then
+            FOUND=$(printf '%s' "$ID" | grep -Eo '[0-9a-f]{32}' | head -1 || true)
+            if [ -n "$FOUND" ]; then echo "::warning::CLOUDFLARE_ACCOUNT_ID に余分な文字（${#ID}文字）があったので、32文字のIDだけを使います。Secret を ID だけに直しておくと安心です"; ID=$FOUND; echo "::add-mask::$ID"; fi
+          fi
           if ! printf '%s' "$ID" | grep -Eq '^[0-9a-f]{32}$'; then
             echo "::error::CLOUDFLARE_ACCOUNT_ID が英数字（0-9, a-f）32文字ではありません（今の長さ: ${#ID}文字）。メールアドレスやアカウント名ではなく、Workers & Pages の右側にある「アカウントID」を入れてください"
             exit 1
