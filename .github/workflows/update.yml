@@ -46,6 +46,21 @@ jobs:
             echo "::error::リポジトリの Secrets に CLOUDFLARE_API_TOKEN と CLOUDFLARE_ACCOUNT_ID を登録してください"
             exit 1
           fi
+          # 貼り付けたときに混ざった空白・改行を取り除く（値そのものはログに出さない）
+          ID=$(printf '%s' "$CLOUDFLARE_ACCOUNT_ID" | tr -d '[:space:]')
+          TOKEN=$(printf '%s' "$CLOUDFLARE_API_TOKEN" | tr -d '[:space:]')
+          echo "::add-mask::$ID"; echo "::add-mask::$TOKEN"
+          if [ "$ID" != "$CLOUDFLARE_ACCOUNT_ID" ]; then echo "::warning::CLOUDFLARE_ACCOUNT_ID に空白か改行が入っていたので取り除きました"; fi
+          if ! printf '%s' "$ID" | grep -Eq '^[0-9a-f]{32}$'; then
+            echo "::error::CLOUDFLARE_ACCOUNT_ID が英数字（0-9, a-f）32文字ではありません（今の長さ: ${#ID}文字）。メールアドレスやアカウント名ではなく、Workers & Pages の右側にある「アカウントID」を入れてください"
+            exit 1
+          fi
+          echo "CLOUDFLARE_ACCOUNT_ID=$ID" >> "$GITHUB_ENV"
+          echo "CLOUDFLARE_API_TOKEN=$TOKEN" >> "$GITHUB_ENV"
+          # トークンが有効か・このアカウントを触れるかを確認
+          code=$(curl -s -o /tmp/cf.json -w '%{http_code}' -H "Authorization: Bearer $TOKEN" "https://api.cloudflare.com/client/v4/accounts/$ID/pages/projects")
+          echo "Pages API の応答: HTTP $code"
+          node -e 'const r=require("/tmp/cf.json"); for (const e of r.errors||[]) console.log(`::warning::Cloudflare: ${e.code} ${e.message}`)' || true
 
       - name: Pages プロジェクトを用意（初回のみ作成）
         run: npx --yes wrangler@3 pages project create "$PROJECT" --production-branch=main || echo "既にあるのでそのまま使います"
