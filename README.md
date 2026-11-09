@@ -58,7 +58,7 @@ npm run serve        # http://localhost:8080
    - `CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`（はしごシネマと同じもの）
    - `RAKUTEN_APP_ID`、`RAKUTEN_ACCESS_KEY`（取得後。なくても動く）
 3. Actions タブで「データ更新・公開」を手動実行 → `https://hashigo-camp.pages.dev`
-4. 独自ドメイン `hashigo-camp.com` を Pages に接続し、pages.dev は Cloudflare Access で自分だけに
+4. 独自ドメイン `camp.hashigo-map.com` を Pages に接続（旧ドメイン `hashigo-camp.com` はこちらへ転送）し、pages.dev は Cloudflare Access で自分だけに
 
 ## 空き状況（今後）
 
